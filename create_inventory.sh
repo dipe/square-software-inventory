@@ -6,7 +6,7 @@ find / \( -xdev -type d -name "*.app" -o -type f -perm +111 -print0 \) -o \( \( 
         our %vanilla_mac_book;
 
         BEGIN { 
-            my $url = "https://raw.githubusercontent.com/dipe/square-software-inventory/main/vanilla_acn_mac_book.txt";
+            my $url = "https://raw.githubusercontent.com/dipe/square-software-inventory/main/vanilla_mac_book.txt";
             my $vanilla_mac_book_txt = `curl -s $url`;
             unless ($? == 0) {
                     die "Error when retrieving the URL: $url\n";
