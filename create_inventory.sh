@@ -30,10 +30,13 @@ find / \( -xdev -type d -name "*.app" -o -type f -perm +111 -print0 \) -o \( \( 
             push @auths, $auth; 
             next; 
         }; 
+        /Format=bundle/ and do { 
+            $type="Bundle";
+        }; 
         /Format=app bundle/ and do { 
             $type="Bundle";
         }; 
-        /Format=(.*)/ and do { 
+        /Format=Mach-O/ and do { 
             $type="Binary";
         }; 
         END { 
