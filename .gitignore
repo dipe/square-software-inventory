@@ -1,4 +1,2 @@
-teamIdentifier.csv
-Executables_with_teamIdentifier.csv
-create_inventory.log
-Authority.csv
+*.csv
+*.log

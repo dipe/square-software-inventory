@@ -1,27 +1,42 @@
 #!/bin/bash
-find / -xdev -type d -name "*.app" -o -type f -perm +111 -print0 2>create_inventory.log \
+
+find / \( -xdev -type d -name "*.app" -o -type f -perm +111 -print0 \) -o \( \( -path "/System" -o -path "/Volumes" \) -prune \) 2>create_inventory.log \
     | xargs -0 codesign -dvv --continue 2>&1 \
     | perl -ne '
-        BEGIN { print "Executable,Authority,teamIdentifier\n"; } 
+        our %vanilla_mac_book;
+
+        BEGIN { 
+            my $url = "https://raw.githubusercontent.com/dipe/square-software-inventory/main/vanilla_acn_mac_book.txt";
+            my $vanilla_mac_book_txt = `curl -s $url`;
+            unless ($? == 0) {
+                    die "Error when retrieving the URL: $url\n";
+            }
+
+            my @vanilla_mac_book_lines = split /\n/, $vanilla_mac_book_txt;
+            foreach my $path (@vanilla_mac_book_lines) {
+                chomp $path;
+                $vanilla_mac_book{$path} = 1;
+            }
+
+            print "Type,App Name,Publisher Details\n"; 
+        } 
+
         /^Executable=(.*)/ and do { 
-            print "$exec,\"" . join(";", @auths) . "\", $team\n" if $exec; 
-            $exec = $1; @auths = (); $team = ""; next; 
+            print "$type,$exec,\"" . join(";", @auths) . "\"\n" if $exec && !exists $vanilla_mac_book{$exec}; 
+            $exec = $1; @auths = (); $type = ""; next; 
         }; 
         /^Authority=(.*)/ and do { 
             (my $auth = $1) =~ s/,/./g; # Ersetzt alle Kommas durch Punkte
             push @auths, $auth; 
             next; 
         }; 
-        /TeamIdentifier=(.*)/ and do { 
-            $team=$1; 
+        /Format=app bundle/ and do { 
+            $type="Bundle";
+        }; 
+        /Format=(.*)/ and do { 
+            $type="Binary";
         }; 
         END { 
-            print "$exec,\"" . join(";", @auths) . "\", $team\n" if $exec; 
-        }' \
-        > Executables_with_teamIdentifier.csv
-perl -F',' -ane 'next if $. == 1; $F[1] =~ s/\R//g; $seen{$F[1]}++ or print "$F[1]\n"' \
-    <Executables_with_teamIdentifier.csv \
-    >Authority.csv
-perl -F',' -ane 'next if $. == 1; $F[2] =~ s/\R//g; $seen{$F[2]}++ or print "$F[2]\n"' \
-    <Executables_with_teamIdentifier.csv \
-    >teamIdentifier.csv
+            print "$type,$exec,\"" . join(";", @auths) . "\"\n" if $exec && !exists $vanilla_mac_book{$exec}; 
+        }
+    ' >square_tisax_inventory.csv
