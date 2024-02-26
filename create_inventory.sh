@@ -1,5 +1,14 @@
 #!/bin/bash
 
+echo -e "Working...\nThis can take between 3 and 30 minutes. Please be patient."
+
+TEMP=`basename -s .sh $0`
+DIRNAME=`hostname`
+TEMPDIR=`mktemp -d /tmp/${TEMP}-XXXXXX` || exit 1
+cd $TEMPDIR
+mkdir ${DIRNAME}
+cd ${DIRNAME}
+
 find / \( -xdev -type d -name "*.app" -o -type f -perm +111 -print0 \) -o \( \( -path "/System" -o -path "/Volumes" \) -prune \) 2>create_inventory.log \
     | xargs -0 codesign -dvv --continue 2>&1 \
     | perl -ne '
@@ -39,7 +48,20 @@ find / \( -xdev -type d -name "*.app" -o -type f -perm +111 -print0 \) -o \( \( 
         /Format=Mach-O/ and do { 
             $type="Binary";
         }; 
+        /Format=generic/ and do { 
+            $type="Generic";
+        }; 
         END { 
             print "$type,$exec,\"" . join(";", @auths) . "\"\n" if $exec && !exists $vanilla_mac_book{$exec}; 
         }
     ' >square_tisax_inventory.csv
+
+cd ..
+
+echo -e "\nCreating zip archive:"
+ZIPFILE=${DIRNAME}.zip 
+zip -r ${ZIPFILE} ${DIRNAME}
+mv ${ZIPFILE} ~/.
+echo -e "done.\n"
+
+echo "You will now find a file named ${ZIPFILE} in your user directory ${USER}."
