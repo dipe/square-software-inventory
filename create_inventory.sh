@@ -1,6 +1,7 @@
 #!/bin/bash
 
-echo -e "Working...\nThis can take between 3 and 30 minutes. Please be patient. You don't have to wait. You can continue your work and switch back here later."
+echo -e "Working...\nThis can take between 3 and 30 minutes. Please be patient."
+echo "You don't have to wait. You can continue your work and switch back here later."
 
 TEMP=`basename -s .sh $0`
 DIRNAME=`hostname`
