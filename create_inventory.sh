@@ -12,7 +12,7 @@ cd $TEMPDIR
 mkdir ${DIRNAME}
 cd ${DIRNAME}
 
-find / \( -xdev -type d -name "*.app" -o -type f -perm +111 -print0 \) -o \( \( -path "/System" -o -path "/Volumes" \) -prune \) 2>create_inventory.log \
+find / \( -type d -name "*.app" -o -type f -perm +111 -print0 \) -o \( \( -path "/System" -o -path "/Volumes" -o -path "/Users/$USER/Library/CloudStorage" -o -path "/dev" \) -prune \) 2>create_inventory.log \
     | xargs -0 codesign -dvv --continue 2>&1 \
     | perl -ne '
         our %vanilla_mac_book;
