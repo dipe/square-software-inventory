@@ -38,7 +38,7 @@ $ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/dipe/square-softw
 Confirm Execution: This Sudo Command requires admin rights. Are you sure you wish to proceed?
 Yes/No: yes
 Working...
-This can take between 3 and 90+ minutes. Please be patient.
+This can take between 3 and 90 minutes. Please be patient.
 You don't have to wait. You can continue your work and switch back here later.
 
 Creating zip archive:

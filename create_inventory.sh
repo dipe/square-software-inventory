@@ -2,7 +2,7 @@
 
 SECONDS=0
 
-echo -e "Working...\nThis can take between 3 and 90+ minutes. Please be patient and don't close this window."
+echo -e "Working...\nThis can take between 3 and 90 minutes. Please be patient and don't close this window."
 echo "You don't have to wait. You can continue your work and switch back here later."
 
 TEMP=`basename -s .sh $0`
