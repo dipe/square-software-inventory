@@ -32,8 +32,10 @@ find / \( -type d -name "*.app" -o -type f -perm +111 -print0 \) -o \( \( -path 
 
             binmode(STDOUT, ":encoding(UTF-8)");
             print "\"Type\";\"Publisher Details\";\"TeamIdentifier\";\"Guessed App Name\";\"Path\"\n";
+
+            $user = $ENV{'SUDO_USER'} || $ENV{'USER'};
         } 
-        /^Executable=(.*)/ and do { 
+        /^Executable=(.*)/ and do {
             if ($exec) {
                 my $appName = "";
                 if ($exec =~ /\/([^\/]+)\.app/) {
@@ -44,7 +46,9 @@ find / \( -type d -name "*.app" -o -type f -perm +111 -print0 \) -o \( \( -path 
                 my $authority_to_print = $devIdApp ? $devIdApp : join(";", @auths);
                 print "\"$type\";\"$authority_to_print\";\"$team\";\"$appName\";\"$exec\"\n" if $exec && !exists $vanilla_mac_book{$exec} && $team ne "not set"; 
             }
-           $exec = $1; @auths = (); $type = ""; $devIdApp = ""; $team = ""; next; 
+            $exec = $1;
+            $exec =~ s/\Q$user/USER/;
+            @auths = (); $type = ""; $devIdApp = ""; $team = ""; next;
         }; 
         /^Authority=Developer ID Application: (.*)/ and do {
             $devIdApp = $1 unless $devIdApp; 
