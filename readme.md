@@ -19,13 +19,23 @@ Open terminal.app and copy paste this line. Answer execustion confimation with y
 sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/dipe/square-software-inventory/main/create_inventory.sh)"
 ```
 
-Dialogues with access requests may occur while the software is running. 
+Presumably you will immediately receive the folowing error message:
+
+```
+<YOUR.NAME> is not in the sudoers file.  This incident will be reported.
+````
+
+To avoided this please open the myAccentureMac app before and select the option "Promote User to Admin for 10 Minutes" and than start the commandline above.
+
+![Promote](promote.png)
+
+while the software is running dialogues with access requests may occur like this:
 
 ![Access request](zugriffsanfrage.png)
 
 You should allow access to folders containing programs. You can deny access to folders containing personal documents and photos. However, the data will not be read.
 
-If you run the programme several times, you may be asked at the end whether the previous zip file may be overwritten by the new one. You should answer yes to this question;
+If you run the program several times, you may be asked at the end whether the previous zip file may be overwritten by the new one. You should answer yes by pressing y <return>:
 
 ```
 override rw-r--r--  root/wheel for /Users/peter.ehrenberg/./AMATX36VVY9JX.zip?
@@ -42,11 +52,11 @@ This can take between 3 and 90 minutes. Please be patient.
 You don't have to wait. You can continue your work and switch back here later.
 
 Creating zip archive:
-  adding: XXATX36AFY9DX/ (stored 0%)
-  adding: XXATX36AFY9DX/square_tisax_inventory.csv (deflated 95%)
-  adding: XXATX36AFY9DX/create_inventory.log (deflated 89%)
+  adding: AMAXX399QFY7DZ/ (stored 0%)
+  adding: AMAXX399QFY7DZ/square_tisax_inventory.csv (deflated 95%)
+  adding: AMAXX399QFY7DZ/create_inventory.log (deflated 89%)
 done.
 
-You will now find a file named XXATX36AFY9DX.zip in your user directory your.name
+You will now find a file named AMAXX399QFY7DZ.zip in your user directory your.name
 $ 
 ```
